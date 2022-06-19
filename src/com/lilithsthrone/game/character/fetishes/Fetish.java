@@ -1953,7 +1953,7 @@ public enum Fetish {
 		
 		if(pathName!=null) {
 			try {
-				InputStream is = this.getClass().getResourceAsStream("/com/lilithsthrone/res/fetishes/" + pathName + ".svg");
+				InputStream is = Fetish.class.getClassLoader().getResourceAsStream("com/lilithsthrone/res/fetishes/" + pathName + ".svg");
 				if(is==null) {
 					System.err.println("Error! Fetish icon file does not exist (Trying to read from '"+pathName+"')!");
 				}

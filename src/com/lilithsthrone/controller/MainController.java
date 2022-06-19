@@ -1,9 +1,12 @@
 package com.lilithsthrone.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1024,6 +1027,12 @@ public class MainController implements Initializable {
 	 */
 	private void setUpWebViews() {
 
+		// CONTEXT: JavaFX wants a filepath that begins with one of a few strict prefixes, and will error out incessantly otherwise. Instead of arguing with it
+		// we just load the content of the file ourself into a data URI, and pass that since it accepts those without issues.
+		InputStream is;
+		String filePath;
+		String data;
+		Boolean lightTheme = Main.getProperties().hasValue(PropertyValue.lightTheme);
 		java.net.CookieHandler.setDefault(cookieManager);
 		
 		// Tooltip WebView:
@@ -1032,10 +1041,14 @@ public class MainController implements Initializable {
 		webEngineTooltip.setJavaScriptEnabled(false);
 		webEngineTooltip.getHistory().setMaxSize(0);
 		
-		if (Main.getProperties().hasValue(PropertyValue.lightTheme)) {
-			webEngineTooltip.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewTooltip_stylesheet_light.css").toExternalForm());
-		} else {
-			webEngineTooltip.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewTooltip_stylesheet.css").toExternalForm());
+		filePath = (lightTheme) ? "/com/lilithsthrone/res/css/webViewTooltip_stylesheet_light.css" : "/com/lilithsthrone/res/css/webViewTooltip_stylesheet.css";
+		try {
+			is = getClass().getResourceAsStream(filePath);
+			data = "data:text/css;charset=utf-8;base64," + Base64.getEncoder().encodeToString(is.readAllBytes());
+			webEngineTooltip.setUserStyleSheetLocation(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		// Main WebView:
@@ -1044,10 +1057,14 @@ public class MainController implements Initializable {
 //		webEngine.setJavaScriptEnabled(false);
 		webEngine.getHistory().setMaxSize(0);
 		
-		if (Main.getProperties().hasValue(PropertyValue.lightTheme)) {
-			webEngine.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webView_stylesheet_light.css").toExternalForm());
-		} else {
-			webEngine.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webView_stylesheet.css").toExternalForm());
+		filePath = (lightTheme) ? "/com/lilithsthrone/res/css/webView_stylesheet_light.css" : "/com/lilithsthrone/res/css/webView_stylesheet.css";
+		try {
+			is = getClass().getResourceAsStream(filePath);
+			data = "data:text/css;charset=utf-8;base64," + Base64.getEncoder().encodeToString(is.readAllBytes());
+			webEngine.setUserStyleSheetLocation(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(debugAllowListeners) {
@@ -1067,10 +1084,14 @@ public class MainController implements Initializable {
 		webEngineButtonsLeft.setJavaScriptEnabled(false);
 		webEngineButtonsLeft.getHistory().setMaxSize(0);
 		
-		if (Main.getProperties().hasValue(PropertyValue.lightTheme)) {
-			webEngineButtonsLeft.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewButtons_stylesheet_light.css").toExternalForm());
-		} else {
-			webEngineButtonsLeft.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewButtons_stylesheet.css").toExternalForm());
+		filePath = (lightTheme) ? "/com/lilithsthrone/res/css/webViewButtons_stylesheet_light.css" : "/com/lilithsthrone/res/css/webViewButtons_stylesheet.css";
+		try {
+			is = getClass().getResourceAsStream(filePath);
+			data = "data:text/css;charset=utf-8;base64," + Base64.getEncoder().encodeToString(is.readAllBytes());
+			webEngineButtonsLeft.setUserStyleSheetLocation(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(debugAllowListeners)
@@ -1086,10 +1107,13 @@ public class MainController implements Initializable {
 		webEngineButtonsRight.setJavaScriptEnabled(false);
 		webEngineButtonsRight.getHistory().setMaxSize(0);
 		
-		if (Main.getProperties().hasValue(PropertyValue.lightTheme)) {
-			webEngineButtonsRight.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewButtons_stylesheet_light.css").toExternalForm());
-		} else {
-			webEngineButtonsRight.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewButtons_stylesheet.css").toExternalForm());
+		try {
+			is = getClass().getResourceAsStream(filePath);
+			data = "data:text/css;charset=utf-8;base64," + Base64.getEncoder().encodeToString(is.readAllBytes());
+			webEngineButtonsRight.setUserStyleSheetLocation(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(debugAllowListeners)
@@ -1107,10 +1131,14 @@ public class MainController implements Initializable {
 		webEngineAttributes.setJavaScriptEnabled(false);
 		webEngineAttributes.getHistory().setMaxSize(0);
 		
-		if (Main.getProperties().hasValue(PropertyValue.lightTheme)) {
-			webEngineAttributes.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewAttributes_stylesheet_light.css").toExternalForm());
-		} else {
-			webEngineAttributes.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewAttributes_stylesheet.css").toExternalForm());
+		filePath = (lightTheme) ? "/com/lilithsthrone/res/css/webViewAttributes_stylesheet_light.css" : "/com/lilithsthrone/res/css/webViewAttributes_stylesheet.css";
+		try {
+			is = getClass().getResourceAsStream(filePath);
+			data = "data:text/css;charset=utf-8;base64," + Base64.getEncoder().encodeToString(is.readAllBytes());
+			webEngineAttributes.setUserStyleSheetLocation(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(debugAllowListeners){
@@ -1128,10 +1156,14 @@ public class MainController implements Initializable {
 		webEngineRight.setJavaScriptEnabled(false);
 		webEngineRight.getHistory().setMaxSize(0);
 		
-		if (Main.getProperties().hasValue(PropertyValue.lightTheme)) {
-			webEngineRight.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewAttributes_stylesheet_light.css").toExternalForm());
-		} else {
-			webEngineRight.setUserStyleSheetLocation(getClass().getResource("/com/lilithsthrone/res/css/webViewAttributes_stylesheet.css").toExternalForm());
+		filePath = (lightTheme) ? "/com/lilithsthrone/res/css/webViewAttributes_stylesheet_light.css" : "/com/lilithsthrone/res/css/webViewAttributes_stylesheet.css";
+		try {
+			is = getClass().getResourceAsStream(filePath);
+			data = "data:text/css;charset=utf-8;base64," + Base64.getEncoder().encodeToString(is.readAllBytes());
+			webEngineRight.setUserStyleSheetLocation(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if(debugAllowListeners) {

@@ -21,9 +21,12 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.script.Bindings;
 import javax.script.CompiledScript;
+import javax.script.Compilable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.w3c.dom.Document;
@@ -220,9 +223,6 @@ import com.lilithsthrone.world.places.AbstractPlaceUpgrade;
 import com.lilithsthrone.world.places.PlaceType;
 import com.lilithsthrone.world.places.PlaceUpgrade;
 
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
-
 /**
  * @since 0.1.0
  * @version 0.4
@@ -245,7 +245,6 @@ public class UtilText {
 	private static boolean parseCapitalise;
 	private static boolean parseAddPronoun;
 
-	private static NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
 	private static ScriptEngine engine;
 	
 	private static List<String> specialParsingStrings = new ArrayList<>();
@@ -9702,14 +9701,11 @@ public class UtilText {
 	
 	public static void initScriptEngine() {
 		// http://hg.openjdk.java.net/jdk8/jdk8/nashorn/rev/eb7b8340ce3a
-		engine = factory.getScriptEngine("-strict", "--no-java", "--no-syntax-extensions");//, "-scripting");
+		engine = new ScriptEngineManager().getEngineByName("Graal.js");
+		
 		try {
-			engine.getBindings(ScriptContext.ENGINE_SCOPE).remove("exit");
-			engine.getBindings(ScriptContext.ENGINE_SCOPE).remove("quit");
-			engine.getBindings(ScriptContext.ENGINE_SCOPE).remove("load");
-			engine.getBindings(ScriptContext.ENGINE_SCOPE).remove("loadWithNewGlobal");
-			engine.getBindings(ScriptContext.ENGINE_SCOPE).remove("bindProperties");
-			engine.getBindings(ScriptContext.ENGINE_SCOPE).remove("Object.bindProperties");
+			Bindings binds = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+			binds.put("polyglot.js.allowAllAccess", true);
 		} catch(Exception ex) {
 			System.err.println("ENGINE_SCOPE binding removal error.");
 		}
@@ -10857,7 +10853,7 @@ public class UtilText {
 		
 		
 		// This is the old code which works but is slow:
-		CompiledScript script = ((NashornScriptEngine)engine).compile(command);
+		CompiledScript script = ((Compilable) engine).compile(command);
 		return script.eval();
 	}
 }

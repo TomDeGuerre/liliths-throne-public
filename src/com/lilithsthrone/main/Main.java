@@ -96,7 +96,7 @@ public class Main extends Application {
 	 */
 	public final static boolean DEBUG = Boolean.valueOf(System.getProperty("debug", "false"));
 
-	public static final Image WINDOW_IMAGE = new Image("/com/lilithsthrone/res/images/windowIcon32.png");
+	public static Image WINDOW_IMAGE;
 	
 	private static Properties properties;
 	
@@ -447,7 +447,7 @@ public class Main extends Application {
 		
 		credits.sort(Comparator.comparing((CreditsSlot a) -> a.getName().toLowerCase()));
 		
-		
+		WINDOW_IMAGE = new Image("com/lilithsthrone/res/images/windowIcon32.png");
 		Main.primaryStage = primaryStage;
 		
 		Main.primaryStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -466,7 +466,7 @@ public class Main extends Application {
 		loadFonts();
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/lilithsthrone/res/fxml/main.fxml"));
-
+		
 		Pane pane = loader.load();
 
 		mainScene = new Scene(pane);
@@ -484,7 +484,7 @@ public class Main extends Application {
 		Main.sex = new Sex();
 		Main.combat = new Combat();
 		
-		loader = new FXMLLoader(getClass().getResource("/com/lilithsthrone/res/fxml/main.fxml"));
+		loader = new FXMLLoader(getClass().getResource("com/lilithsthrone/res/fxml/main.fxml"));
 		try {
 			if (Main.mainScene == null) {
 				pane = loader.load();
@@ -651,7 +651,7 @@ public class Main extends Application {
 
 		// Open error log
 		if(!DEBUG) {
-			System.out.println("Printing to error.log");
+			System.out.println("Printing to '/data/error.log'");
 			try {
 				@SuppressWarnings("resource")
 				PrintStream stream = new PrintStream("data/error.log");
