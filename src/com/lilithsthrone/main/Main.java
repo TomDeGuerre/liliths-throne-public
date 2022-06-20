@@ -124,7 +124,7 @@ public class Main extends Application {
 			+ " This game has been made in the spirit of creating a piece of artistic interactive literature, and it is imperative that you maintain a clear distinction between reality and the fictional events depicted in this game.</p>";
 	
 	public static List<CreditsSlot> credits = new ArrayList<>();
-
+	
 	// World generation:
 	public static Generation gen;
 	@Override
@@ -640,7 +640,6 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		
 		// Create folders:
 		File dir = new File("data/");
 		dir.mkdir();
@@ -674,6 +673,7 @@ public class Main extends Application {
 			}
 		} else {
 			properties = new Properties();
+			properties.setDefaults();
 			properties.savePropertiesAsXML();
 		}
 

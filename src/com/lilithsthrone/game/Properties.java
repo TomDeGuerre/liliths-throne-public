@@ -1,6 +1,7 @@
 package com.lilithsthrone.game;
 
 import java.io.File;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -192,35 +193,57 @@ public class Properties {
 	private Set<AbstractClothingType> clothingDiscovered;
 	private Set<AbstractSubspecies> subspeciesDiscovered;
 	private Set<AbstractSubspecies> subspeciesAdvancedKnowledge;
-
+	
 	public Properties() {
 		values = new HashSet<>();
+
+		hotkeyMapPrimary = new EnumMap<>(KeyboardAction.class);
+		hotkeyMapSecondary = new EnumMap<>(KeyboardAction.class);
+		
+		genderNameFemale = new EnumMap<>(GenderNames.class);
+		genderNameMale = new EnumMap<>(GenderNames.class);
+		genderNameNeutral = new EnumMap<>(GenderNames.class);
+		
+		genderPronounFemale = new EnumMap<>(GenderPronoun.class);
+		genderPronounMale = new EnumMap<>(GenderPronoun.class);
+		
+		forcedTFPreference = FurryPreference.NORMAL;
+		forcedTFTendency = ForcedTFTendency.NEUTRAL;
+		forcedFetishTendency = ForcedFetishTendency.NEUTRAL;
+		
+		subspeciesFeminineFurryPreferencesMap = new HashMap<>();
+		subspeciesMasculineFurryPreferencesMap = new HashMap<>();
+
+		subspeciesFemininePreferencesMap = new HashMap<>();
+		subspeciesMasculinePreferencesMap = new HashMap<>();
+		
+		skinColourPreferencesMap = new LinkedHashMap<>();
+		
+		itemsDiscovered = new HashSet<>();
+		weaponsDiscovered = new HashSet<>();
+		clothingDiscovered = new HashSet<>();
+		subspeciesDiscovered = new HashSet<>();
+		subspeciesAdvancedKnowledge = new HashSet<>();
+	}
+	
+	public void setDefaults() {
 		for(PropertyValue value : PropertyValue.values()) {
 			if(value.getDefaultValue()) {
 				values.add(value);
 			}
 		}
 
-		hotkeyMapPrimary = new EnumMap<>(KeyboardAction.class);
-		hotkeyMapSecondary = new EnumMap<>(KeyboardAction.class);
-
 		for (KeyboardAction ka : KeyboardAction.values()) {
 			hotkeyMapPrimary.put(ka, ka.getPrimaryDefault());
 			hotkeyMapSecondary.put(ka, ka.getSecondaryDefault());
 		}
 		
-		genderNameFemale = new EnumMap<>(GenderNames.class);
-		genderNameMale = new EnumMap<>(GenderNames.class);
-		genderNameNeutral = new EnumMap<>(GenderNames.class);
 		
 		for (GenderNames gn : GenderNames.values()) {
 			genderNameFemale.put(gn, gn.getFeminine());
 			genderNameMale.put(gn, gn.getMasculine());
 			genderNameNeutral.put(gn, gn.getNeutral());
 		}
-		
-		genderPronounFemale = new EnumMap<>(GenderPronoun.class);
-		genderPronounMale = new EnumMap<>(GenderPronoun.class);
 
 		for (GenderPronoun gp : GenderPronoun.values()) {
 			genderPronounFemale.put(gp, gp.getFeminine());
@@ -232,37 +255,22 @@ public class Properties {
 		resetOrientationPreferences();
 		
 		resetFetishPreferences();
-
+		
 		resetAgePreferences();
 		
-		forcedTFPreference = FurryPreference.NORMAL;
-		forcedTFTendency = ForcedTFTendency.NEUTRAL;
-		forcedFetishTendency = ForcedFetishTendency.NEUTRAL;
-		
-		subspeciesFeminineFurryPreferencesMap = new HashMap<>();
-		subspeciesMasculineFurryPreferencesMap = new HashMap<>();
 		for(AbstractSubspecies s : Subspecies.getAllSubspecies()) {
 			subspeciesFeminineFurryPreferencesMap.put(s, s.getDefaultFemininePreference());
 			subspeciesMasculineFurryPreferencesMap.put(s, s.getDefaultMasculinePreference());
 		}
-		
-		subspeciesFemininePreferencesMap = new HashMap<>();
-		subspeciesMasculinePreferencesMap = new HashMap<>();
+
 		for(AbstractSubspecies s : Subspecies.getAllSubspecies()) {
 			subspeciesFemininePreferencesMap.put(s, s.getSubspeciesPreferenceDefault());
 			subspeciesMasculinePreferencesMap.put(s, s.getSubspeciesPreferenceDefault());
 		}
 		
-		skinColourPreferencesMap = new LinkedHashMap<>();
 		for(Entry<Colour, Integer> entry : PresetColour.getHumanSkinColoursMap().entrySet()) {
 			skinColourPreferencesMap.put(entry.getKey(), entry.getValue());
 		}
-		
-		itemsDiscovered = new HashSet<>();
-		weaponsDiscovered = new HashSet<>();
-		clothingDiscovered = new HashSet<>();
-		subspeciesDiscovered = new HashSet<>();
-		subspeciesAdvancedKnowledge = new HashSet<>();
 	}
 	
 	public void savePropertiesAsXML(){
@@ -610,7 +618,6 @@ public class Properties {
 				element.setTextContent(Subspecies.getIdFromSubspecies(subspecies));
 			}
 			
-			
 			// Write out to properties.xml:
 			Transformer transformer = Main.transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -619,7 +626,6 @@ public class Properties {
 			StreamResult result = new StreamResult("data/properties.xml");
 		
 			transformer.transform(source, result);
-		
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
@@ -634,7 +640,6 @@ public class Properties {
 	}
 	
 	public void loadPropertiesFromXML(){
-		
 		if (new File("data/properties.xml").exists())
 			try {
 				File propertiesXML = new File("data/properties.xml");
