@@ -2221,7 +2221,7 @@ public abstract class NPC extends GameCharacter implements XMLSaving {
 			
 			// Preferred race stage:
 			if(preferredGender.isFeminine()) {
-				switch(Main.getProperties().getSubspeciesFeminineFurryPreferencesMap().get(species)) {
+				switch(Main.getProperties().getSubspeciesFeminineFurryPreference(species)) {
 					case HUMAN:
 						stage = RaceStage.HUMAN;
 						break;
@@ -2239,7 +2239,7 @@ public abstract class NPC extends GameCharacter implements XMLSaving {
 						break;
 				}
 			} else {
-				switch(Main.getProperties().getSubspeciesMasculineFurryPreferencesMap().get(species)) {
+				switch(Main.getProperties().getSubspeciesMasculineFurryPreference(species)) {
 					case HUMAN:
 						stage = RaceStage.HUMAN;
 						break;

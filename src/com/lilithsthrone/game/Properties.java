@@ -524,11 +524,11 @@ public class Properties {
 				element.setAttributeNode(race);
 				
 				Attr preference = doc.createAttribute("preference");
-				preference.setValue(subspeciesFemininePreferencesMap.get(subspecies).toString());
+				preference.setValue(getSubspeciesFemininePreference(subspecies).toString());
 				element.setAttributeNode(preference);
 
 				preference = doc.createAttribute("furryPreference");
-				preference.setValue(subspeciesFeminineFurryPreferencesMap.get(subspecies).toString());
+				preference.setValue(getSubspeciesFeminineFurryPreference(subspecies).toString());
 				element.setAttributeNode(preference);
 				
 				element = doc.createElement("preferenceMasculine");
@@ -539,11 +539,11 @@ public class Properties {
 				element.setAttributeNode(race);
 				
 				preference = doc.createAttribute("preference");
-				preference.setValue(subspeciesMasculinePreferencesMap.get(subspecies).toString());
+				preference.setValue(getSubspeciesMasculinePreference(subspecies).toString());
 				element.setAttributeNode(preference);
 				
 				preference = doc.createAttribute("furryPreference");
-				preference.setValue(subspeciesMasculineFurryPreferencesMap.get(subspecies).toString());
+				preference.setValue(getSubspeciesMasculineFurryPreference(subspecies).toString());
 				element.setAttributeNode(preference);
 			}
 
@@ -1530,20 +1530,98 @@ public class Properties {
 		subspeciesMasculinePreferencesMap.put(subspecies, subspeciesPreference);
 	}
 
+	/**
+	 * Deprecated. Use getSubspeciesFeminineFurryPreferences instead.
+	 * @return
+	 */
 	public Map<AbstractSubspecies, FurryPreference> getSubspeciesFeminineFurryPreferencesMap() {
 		return subspeciesFeminineFurryPreferencesMap;
 	}
 
+	/**
+	 * Deprecated. Use getSubspeciesMasculineFurryPreferences instead.
+	 * @return
+	 */
 	public Map<AbstractSubspecies, FurryPreference> getSubspeciesMasculineFurryPreferencesMap() {
 		return subspeciesMasculineFurryPreferencesMap;
 	}
 
+	/**
+	 * Deprecated. Use getSubspeciesFemininePreferences instead.
+	 * @return
+	 */
 	public Map<AbstractSubspecies, SubspeciesPreference> getSubspeciesFemininePreferencesMap() {
 		return subspeciesFemininePreferencesMap;
 	}
 
+	/**
+	 * Deprecated. Use getSubspeciesMasculinePreferences instead.
+	 * @return
+	 */
 	public Map<AbstractSubspecies, SubspeciesPreference> getSubspeciesMasculinePreferencesMap() {
 		return subspeciesMasculinePreferencesMap;
+	}
+	
+	/**
+	 * Gets the FurryPreference stored for a given race's subspecies females or, if not set, sets a default based on the parent race.
+	 * @param species The subspecies whose preference to look for/place
+	 * @return The preference for the subspecies
+	 */
+	public FurryPreference getSubspeciesFeminineFurryPreference(AbstractSubspecies species) {
+		FurryPreference fallback = species.getDefaultFemininePreference();
+		if (!species.getRace().isAffectedByFurryPreference()) return fallback;
+		
+		FurryPreference value = subspeciesFeminineFurryPreferencesMap.get(species);
+		if (value == null) {
+			value = fallback;
+			subspeciesFeminineFurryPreferencesMap.put(species, value);
+		}
+		return value;
+	}
+	
+	/**
+	 * Gets the FurryPreference stored for a given race's subspecies males or, if not set, sets a default based on the parent race.
+	 * @param species The subspecies whose preference to look for/place
+	 * @return The preference for the subspecies
+	 */
+	public FurryPreference getSubspeciesMasculineFurryPreference(AbstractSubspecies species) {
+		FurryPreference fallback = species.getDefaultMasculinePreference();
+		if (!species.getRace().isAffectedByFurryPreference()) return fallback;
+		
+		FurryPreference value = subspeciesMasculineFurryPreferencesMap.get(species);
+		if (value == null) {
+			value = fallback;
+			subspeciesMasculineFurryPreferencesMap.put(species, value);
+		}
+		return value;
+	}
+	
+	/**
+	 * Gets the SubspeciesPreference stored for a given race's subspecies females.
+	 * @param species The subspecies whose preference to look for/place
+	 * @return The preference for the subspecies
+	 */
+	public SubspeciesPreference getSubspeciesFemininePreference(AbstractSubspecies species) {
+		SubspeciesPreference value = subspeciesFemininePreferencesMap.get(species);
+		if (value == null) {
+			value = species.getSubspeciesPreferenceDefault();
+			subspeciesFemininePreferencesMap.put(species, value);
+		}
+		return value;
+	}
+	
+	/**
+	 * Gets the SubspeciesPreference stored for a given race's subspecies males or.
+	 * @param species The subspecies whose preference to look for/place
+	 * @return The preference for the subspecies
+	 */
+	public SubspeciesPreference getSubspeciesMasculinePreference(AbstractSubspecies species) {
+		SubspeciesPreference value = subspeciesMasculinePreferencesMap.get(species);
+		if (value == null) {
+			value = species.getSubspeciesPreferenceDefault();
+			subspeciesMasculinePreferencesMap.put(species, value);
+		}
+		return value;
 	}
 
 	public void resetGenderPreferences() {

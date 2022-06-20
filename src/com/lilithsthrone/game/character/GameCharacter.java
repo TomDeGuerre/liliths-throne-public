@@ -3975,15 +3975,9 @@ public abstract class GameCharacter implements XMLSaving {
 			
 		} else {
 			AbstractSubspecies species = Util.getRandomObjectFromWeightedMap(subspeciesMap);
-			
-			if(gender.isFeminine()) {
-				RaceStage stage = Main.game.getCharacterUtils().getRaceStageFromPreferences(Main.getProperties().getSubspeciesFeminineFurryPreferencesMap().get(species), gender, species);
-				setBody(gender, species, stage, additionalSetups);
-				
-			} else {
-				RaceStage stage = Main.game.getCharacterUtils().getRaceStageFromPreferences(Main.getProperties().getSubspeciesMasculineFurryPreferencesMap().get(species), gender, species);
-				setBody(gender, species, stage, additionalSetups);
-			}
+			FurryPreference furPref = (gender.isFeminine()) ? Main.getProperties().getSubspeciesFeminineFurryPreference(species) : Main.getProperties().getSubspeciesMasculineFurryPreference(species);
+			RaceStage stage = Main.game.getCharacterUtils().getRaceStageFromPreferences(furPref, gender, species);
+			setBody(gender, species, stage, additionalSetups);
 		}
 	}
 

@@ -980,7 +980,7 @@ public class CharacterUtils {
 		if(startingGender==null) {
 			startingGender = Math.random()>0.5f?Gender.F_V_B_FEMALE:Gender.M_P_MALE;
 		}
-		RaceStage stage = overrideStage!=null?overrideStage:getRaceStageFromPreferences(Main.getProperties().getSubspeciesFeminineFurryPreferencesMap().get(halfSubspecies), startingGender, halfSubspecies);
+		RaceStage stage = overrideStage!=null?overrideStage:getRaceStageFromPreferences(Main.getProperties().getSubspeciesFeminineFurryPreference(halfSubspecies), startingGender, halfSubspecies);
 		AbstractRacialBody demonBody = RacialBody.DEMON;
 		
 		if(linkedCharacter!=null) {
@@ -1204,10 +1204,9 @@ public class CharacterUtils {
 				}
 				
 				if(startingGender.isFeminine()) {
-					stage = getRaceStageFromPreferences(Main.getProperties().getSubspeciesFeminineFurryPreferencesMap().get(species), startingGender, species);
-					
+					stage = getRaceStageFromPreferences(Main.getProperties().getSubspeciesFeminineFurryPreference(species), startingGender, species);
 				} else {
-					stage = getRaceStageFromPreferences(Main.getProperties().getSubspeciesMasculineFurryPreferencesMap().get(species), startingGender, species);
+					stage = getRaceStageFromPreferences(Main.getProperties().getSubspeciesMasculineFurryPreference(species), startingGender, species);
 				}
 				
 				startingBodyType = RacialBody.valueOfRace(species.getRace());
