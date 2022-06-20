@@ -224,6 +224,11 @@ public class Properties {
 		clothingDiscovered = new HashSet<>();
 		subspeciesDiscovered = new HashSet<>();
 		subspeciesAdvancedKnowledge = new HashSet<>();
+		
+		genderPreferencesMap = new EnumMap<>(Gender.class);
+		orientationPreferencesMap = new EnumMap<>(SexualOrientation.class);
+		fetishPreferencesMap = new EnumMap<>(Fetish.class);
+		agePreferencesMap = new HashMap<>();
 	}
 	
 	public void setDefaults() {
@@ -1006,6 +1011,7 @@ public class Properties {
 						
 						try {
 							for(PronounType pronoun : PronounType.values()) {
+								if (agePreferencesMap.get(pronoun) == null) agePreferencesMap.put(pronoun, new HashMap<>());
 								agePreferencesMap.get(pronoun).put(AgeCategory.valueOf(e.getAttribute("age")), Integer.valueOf(e.getAttribute(pronoun.toString())));
 							}
 						} catch(IllegalArgumentException ex){
@@ -1061,6 +1067,7 @@ public class Properties {
 								this.setFeminineSubspeciesPreference(Subspecies.getSubspeciesFromId(e.getAttribute("subspecies")), SubspeciesPreference.valueOf(e.getAttribute("preference")));
 								this.setFeminineFurryPreference(Subspecies.getSubspeciesFromId(e.getAttribute("subspecies")), FurryPreference.valueOf(e.getAttribute("furryPreference")));
 							} catch(Exception ex) {
+								System.err.println("loadPropertiesFromXML() error: Race Preferences for " + e.toString());
 							}
 						}
 					}
