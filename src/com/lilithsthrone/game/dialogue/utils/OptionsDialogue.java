@@ -3075,14 +3075,14 @@ public class OptionsDialogue {
 						}
 						
 						for(int i=0; i<cs.getEpicCount()/5; i++) {// 5-marks:
-							UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_EPIC.toWebHexString()+";'>&#127775</b> ");
+							UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_EPIC.toWebHexString()+";'>&#9957</b> ");
 						}
 						for(int i=0; i<cs.getEpicCount()%5; i++) {
 							UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_EPIC.toWebHexString()+";'>&#9679</b> ");
 						}
 						
 						for(int i=0; i<cs.getLegendaryCount()/5; i++) {// 5-marks:
-							UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_LEGENDARY.toWebHexString()+";'>&#127775</b> ");
+							UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_LEGENDARY.toWebHexString()+";'>&#9957</b> ");
 						}
 						for(int i=0; i<cs.getLegendaryCount()%5; i++) {
 							UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_LEGENDARY.toWebHexString()+";'>&#9679</b> ");
@@ -3114,7 +3114,7 @@ public class OptionsDialogue {
 					}
 					
 					for(int i=0; i<cs.getEpicCount()/5; i++) {// 5-marks:
-						UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_EPIC.toWebHexString()+";'>&#127775</b> ");
+						UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_EPIC.toWebHexString()+";'>&#9957</b> "); // Old character &#127775 has weird display errors now.
 					}
 					for(int i=0; i<cs.getEpicCount()%5; i++) {
 						UtilText.nodeContentSB.append("<b style='color:"+PresetColour.RARITY_EPIC.toWebHexString()+";'>&#9679</b> ");
