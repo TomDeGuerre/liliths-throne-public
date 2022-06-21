@@ -2141,6 +2141,16 @@ public class Body implements XMLSaving {
 		return allBodyPartsExtended;
 	}
 	
+	public List<AbstractRace> getAllBodyPartsOrificesRaces() {
+		List<AbstractRace> values = new ArrayList<>();
+		if (subspecies != null) values.add(subspecies.getRace());
+		for (BodyPartInterface part : allBodyPartsExtended) {
+			AbstractRace partRace = part.getType().getRace();
+			if (!values.contains(partRace)) values.add(partRace);
+		}
+		return values;
+	}
+	
 	private String getHeader(String header) {
 		return "<p style='padding-top:0; margin-top:0;'>[style.colourDisabled("+header+":)]<br/>";
 	}

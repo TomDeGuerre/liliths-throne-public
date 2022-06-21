@@ -821,7 +821,11 @@ public abstract class AbstractSubspecies {
 		
 		int highestWeighting = 0;
 		int newWeighting;
+		List<AbstractRace> partRaces = body.getAllBodyPartsOrificesRaces();
 		for(AbstractSubspecies sub : Subspecies.getAllSubspecies()) {
+			if (!partRaces.contains(sub.getRace())) {
+				continue;
+			}
 			newWeighting = sub.getSubspeciesWeighting(body, race);
 			if(newWeighting>highestWeighting
 					&& (!body.isFeral() || sub.isFeralConfigurationAvailable())) {
@@ -831,7 +835,7 @@ public abstract class AbstractSubspecies {
 		}
 		if(subspecies==null) {
 			if(Main.game.isStarted()) { // Races get recalculated after the game starts in Game.handlePostGameInit(), so only show errors if the detection is still failing after that
-				System.err.println("Error: getSubspeciesFromBody() did not find a suitable Subspecies!");
+				System.err.println("Error: getSubspeciesFromBody() did not find a suitable Subspecies!"); // For whatever reason, this now errors out on pure Humans and then...defaults them to Human? Not sure why.
 				new Exception().printStackTrace();
 			}
 			return Subspecies.HUMAN;
