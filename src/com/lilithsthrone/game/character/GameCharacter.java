@@ -441,6 +441,9 @@ public abstract class GameCharacter implements XMLSaving {
 	
 	protected SlaveJob[] workHours;
 	protected Map<SlaveJob, Set<SlaveJobSetting>> slaveJobSettings;
+
+//	protected String slaveCategory = "";
+//	protected String slave_notes = "";
 	
 	
 	//Companion
@@ -1321,6 +1324,19 @@ public abstract class GameCharacter implements XMLSaving {
 					XMLUtil.addAttribute(doc, slaveAssignedJobs, "h"+String.valueOf(i), workHours[i].toString());
 				}
 			}
+
+			// Useful externally.
+			XMLUtil.createXMLElementWithValue(doc, slaveryElement, "value", String.valueOf(this.getValueAsSlave(true)));
+
+//			if(!this.slaveCategory.isEmpty()) {
+//				XMLUtil.createXMLElementWithValue(doc, slaveryElement, "category", this.slaveCategory);
+//			}
+
+//			if(this.slave_notes != "") {
+//				Element notes = doc.createElement("notes");
+//				slaveryElement.appendChild(notes);
+//				notes.setTextContent(this.getSlaveNotes());
+//			}
 		}
 		
 		
@@ -2786,6 +2802,17 @@ public abstract class GameCharacter implements XMLSaving {
 						character.addSlavePermissionSetting(SlavePermission.SEX, SlavePermissionSetting.SEX_SAVE_VIRGINITY);
 					}
 				}
+
+//				// Since 0.4.3.X
+//				Element slaveCat = (Element)slaveryElement.getElementsByTagName("category").item(0);
+//				if (slaveCat != null) {
+//					character.setSlaveCategory(slaveCat.getAttribute("value"));
+//				}
+
+//				Element slaveNotes = (Element)slaveryElement.getElementsByTagName("notes").item(0);
+//				if (slaveNotes != null) {
+//					character.setSlaveNotes(slaveNotes.getTextContent());
+//				}
 			}
 		}
 		
@@ -4119,6 +4146,7 @@ public abstract class GameCharacter implements XMLSaving {
 				case Nibling:
 				case HalfSibling:
 				case Sibling:
+				case SiblingTwin:
 					break;
 				case GrandGrandParent:
 				case GrandParent:
@@ -4716,6 +4744,22 @@ public abstract class GameCharacter implements XMLSaving {
 		}
 		return count;
 	}
+	
+//	public String getSlaveNotes() {
+//		return this.slave_notes;
+//	}
+//
+//	public void setSlaveNotes(String input) {
+//		this.slave_notes = input;
+//	}
+//
+//	public String getSlaveCategory() {
+//		return this.slaveCategory;
+//	}
+//
+//	public void setSlaveCategory(String input) {
+//		this.slaveCategory = input;
+//	}
 
 
 	// Affection:
@@ -5623,7 +5667,11 @@ public abstract class GameCharacter implements XMLSaving {
 			commonParents.add(this.getMotherId());
 		}
 		if(commonParents.size() == 2 || (commonParents.size() == 1 && character.getFatherId().equals(character.getMotherId()))) {
-			result.add(Relationship.Sibling);
+			if(this.getBirthday().equals(character.getBirthday())) {
+				result.add(Relationship.SiblingTwin);
+			} else {
+				result.add(Relationship.Sibling);
+			}
 			
 		} else if(commonParents.size() == 1) {
 			result.add(Relationship.HalfSibling);
