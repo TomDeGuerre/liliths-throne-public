@@ -956,6 +956,7 @@ public class UtilText {
 	private static boolean suppressOutput = false;
 
 	public static String parse(List<GameCharacter> specialNPC, String input, ParserTag... tags) {
+		if (specialNPC.size() > 0 && !Main.game.isStarted()) return ""; // If the game isn't started, there's no point parsing anything related to characters.
 		return parse(specialNPC, input, false, tags);
 	}
 	
