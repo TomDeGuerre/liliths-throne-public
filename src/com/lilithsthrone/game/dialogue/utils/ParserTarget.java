@@ -108,6 +108,7 @@ import com.lilithsthrone.game.character.npc.submission.SlimeQueen;
 import com.lilithsthrone.game.character.npc.submission.SlimeRoyalGuard;
 import com.lilithsthrone.game.character.npc.submission.Takahashi;
 import com.lilithsthrone.game.character.npc.submission.Vengar;
+import com.lilithsthrone.game.dialogue.DialogueNode;
 import com.lilithsthrone.main.Main;
 import com.lilithsthrone.utils.Util;
 
@@ -264,6 +265,7 @@ public class ParserTarget {
 				+ "<b>Otherwise</b>, it returns the most important NPC in the scene.") {
 					@Override
 					public GameCharacter getCharacter(String tag, List<GameCharacter> specialNPCList) throws NullPointerException {
+						DialogueNode currDialogueNode = Main.game.getCurrentDialogueNode();
 						if(specialNPCList!=null && !specialNPCList.isEmpty()) {
 							if(tag.equalsIgnoreCase("npc")) {
 								return specialNPCList.get(0);
@@ -277,10 +279,10 @@ public class ParserTarget {
 						} else if (Main.game.isInSex()) {
 							return Main.sex.getTargetedPartner(Main.game.getPlayer());
 							
-						} else if (Main.game.getCurrentDialogueNode()!=null) {
-							if(Main.game.getCurrentDialogueNode()==CharactersPresentDialogue.MENU
-									 || Main.game.getCurrentDialogueNode()==PhoneDialogue.CONTACTS
-									 || Main.game.getCurrentDialogueNode()==PhoneDialogue.CONTACTS_CHARACTER) {
+						} else if (currDialogueNode!=null) {
+							if(currDialogueNode==CharactersPresentDialogue.MENU
+									 || currDialogueNode==PhoneDialogue.CONTACTS
+									 || currDialogueNode==PhoneDialogue.CONTACTS_CHARACTER) {
 								return CharactersPresentDialogue.characterViewed;
 								
 							} else if(Main.game.getActiveNPC()!=null) {
