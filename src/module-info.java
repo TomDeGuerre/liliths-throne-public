@@ -7,6 +7,7 @@ module liliths_throne_public {
     requires java.desktop;
     requires java.scripting;
     requires org.graalvm.js.scriptengine;
+	requires org.graalvm.sdk;
     
     opens com.lilithsthrone.main to javafx.graphics;
     exports com.lilithsthrone.main;

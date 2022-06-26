@@ -21,12 +21,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.Bindings;
-import javax.script.CompiledScript;
-import javax.script.Compilable;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.w3c.dom.Document;
@@ -245,7 +239,8 @@ public class UtilText {
 	private static boolean parseCapitalise;
 	private static boolean parseAddPronoun;
 
-	private static ScriptEngine engine;
+	//private static ScriptEngine engine;
+	private static GraalEngineWrapper engine;
 	
 	private static List<String> specialParsingStrings = new ArrayList<>();
 	private static List<GameCharacter> parsingCharactersForSpeech = new ArrayList<>();
@@ -9702,17 +9697,7 @@ public class UtilText {
 	
 	public static void initScriptEngine() {
 		// http://hg.openjdk.java.net/jdk8/jdk8/nashorn/rev/eb7b8340ce3a
-		engine = new ScriptEngineManager().getEngineByName("Graal.js");
-		
-		try {
-			Bindings binds = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-			binds.put("polyglot.js.allowAllAccess", true);
-		} catch(Exception ex) {
-			System.err.println("ENGINE_SCOPE binding removal error.");
-		}
-		
-//		ScriptEngineManager manager = new ScriptEngineManager();
-//		engine = manager.getEngineByName("javascript");
+		engine = new GraalEngineWrapper();
 
 		engine.put("RND", Util.random);
 		
@@ -10834,27 +10819,6 @@ public class UtilText {
 	 * @throws ScriptException
 	 */
 	private static Object evaluate(String command) throws ScriptException {
-		// Commented out in 0.4.0.10 as it was continuing to throw parsing errors
-		// Unable to reliably replicate the bug - sometimes everything worked fine, sometimes the #VAR parsing sections would fail to parse completely
-		
-//		CompiledScript script;
-//		if (!memo.containsKey(command)) {
-//			script = ((NashornScriptEngine)engine).compile(command);
-//			if (memo.size() < memo_limit) {
-//				memo.put(command, script);
-//				if (memo.size() == memo_limit) {
-//					System.err.println("Memo has reached capacity! Additional script commands will not be memoized.");
-//				}
-//			}
-//		} else {
-//			script = memo.get(command);
-//		}
-//		return script.eval(((NashornScriptEngine)engine).getContext());
-//		//return script.eval();
-		
-		
-		// This is the old code which works but is slow:
-		CompiledScript script = ((Compilable) engine).compile(command);
-		return script.eval();
+		return engine.eval(command);
 	}
 }
