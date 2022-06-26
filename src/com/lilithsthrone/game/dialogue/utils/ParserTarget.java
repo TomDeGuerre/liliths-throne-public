@@ -119,8 +119,14 @@ import com.lilithsthrone.utils.Util;
  */
 public class ParserTarget {
 	
-	public static AbstractParserTarget STYLE;
-	public static AbstractParserTarget UNIT;
+	public static AbstractParserTarget STYLE = new SpecificParserTarget(
+			Util.newArrayListOfValues("style", "game", "util"),
+			"Returns the same as 'pc', but should be used for style methods such as style.bold or style.italics or conditional methods such as game.isArcaneStorm.",
+			Main.game.getPlayer());
+	public static AbstractParserTarget UNIT = new SpecificParserTarget(
+			Util.newArrayListOfValues("unit", "units", "game"),
+			"Returns the same as 'pc', but should be used for unit methods such as unit.size.",
+			Main.game.getPlayer());
 	public static AbstractParserTarget PC;
 	public static AbstractParserTarget NPC;
 	public static AbstractParserTarget COMPANION;
@@ -229,7 +235,7 @@ public class ParserTarget {
 	public static AbstractParserTarget OGLIX;
 	
 	public static void initializeTargets() {
-		STYLE = new SpecificParserTarget(
+		/*STYLE = new SpecificParserTarget(
 				Util.newArrayListOfValues("style", "game", "util"),
 				"Returns the same as 'pc', but should be used for style methods such as style.bold or style.italics or conditional methods such as game.isArcaneStorm.",
 				Main.game.getPlayer());
@@ -237,7 +243,7 @@ public class ParserTarget {
 		UNIT = new SpecificParserTarget(
 				Util.newArrayListOfValues("unit", "units", "game"),
 				"Returns the same as 'pc', but should be used for unit methods such as unit.size.",
-				Main.game.getPlayer());
+				Main.game.getPlayer());*/
 		
 		PC = new SpecificParserTarget(
 				Util.newArrayListOfValues("pc", "player"),
@@ -756,28 +762,31 @@ public class ParserTarget {
 		}
 	}
 	
-	/*static {
+	static {
 		// Hard-coded parserTarget types (all those up above):
-		
-		Field[] fields = ParserTarget.class.getFields();
-		System.out.print("ParserTargets: ");
-		for(Field f : fields) {
-			if(AbstractParserTarget.class.isAssignableFrom(f.getType())) {
-				AbstractParserTarget parserTarget;
-				try {
-					parserTarget = ((AbstractParserTarget) f.get(null));
-
-					parserTargetToIdMap.put(parserTarget, f.getName());
-					idToParserTargetMap.put(f.getName(), parserTarget);
-					allParserTargets.add(parserTarget);
-					coreParserTargets.add(parserTarget);
-					System.out.print(parserTarget.getClass().getName() + ", ");
-					
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					e.printStackTrace();
-				}
+		String[] onLoadTagNames = {"STYLE", "UNIT"};
+		for (String fieldName : onLoadTagNames) {
+			Field f;
+			try {
+				f = ParserTarget.class.getField(fieldName);
+				AbstractParserTarget target = (AbstractParserTarget) f.get(null);
+				parserTargetToIdMap.put(target, f.getName());
+				idToParserTargetMap.put(f.getName(), target);
+				allParserTargets.add(target);
+				coreParserTargets.add(target);
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		System.out.println();
-	}*/
+	}
 }
