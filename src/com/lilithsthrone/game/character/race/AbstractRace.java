@@ -7,6 +7,7 @@ import java.util.Map;
 import org.w3c.dom.Document;
 
 import com.lilithsthrone.controller.xmlParsing.Element;
+import com.lilithsthrone.game.character.GameCharacter;
 import com.lilithsthrone.game.character.attributes.AbstractAttribute;
 import com.lilithsthrone.game.character.attributes.Attribute;
 import com.lilithsthrone.game.character.body.Body;
@@ -32,6 +33,7 @@ public abstract class AbstractRace {
 	
 	private String racialBodyId;
 	private String raceChangeString;
+	private String raceAdjustString;
 	
 	private String name;
 	private String namePlural;
@@ -165,6 +167,11 @@ public abstract class AbstractRace {
 				this.racialBodyId = coreElement.getMandatoryFirstOf("racialBody").getTextContent();
 				
 				this.raceChangeString = coreElement.getMandatoryFirstOf("applyRaceChanges").getTextContent();
+				coreElement.getOptionalFirstOf("applyRaceAdjustments").ifPresent(
+						(Element e) ->{
+							this.raceAdjustString = e.getTextContent();
+						}
+					);
 				
 				this.name = coreElement.getMandatoryFirstOf("name").getTextContent();
 				this.namePlural = coreElement.getMandatoryFirstOf("namePlural").getTextContent();
@@ -311,6 +318,16 @@ public abstract class AbstractRace {
 		if(this.isFromExternalFile()) {
 			UtilText.setBodyForParsing("targetedBody", body);
 			UtilText.parse(raceChangeString);
+		}
+	}
+	
+	/**
+	 * Applies any special racial changes to the character which is passed in. This is called <b>before</b> Subspecies.applySpeciesAdjustments()
+	 * This is meant for applying special species-wide perks, fetishes, or other non-physical changes.
+	 */
+	public void applyRaceAdjustments(GameCharacter character) {
+		if(this.isFromExternalFile()) {
+			UtilText.parse(character, raceAdjustString);
 		}
 	}
 	

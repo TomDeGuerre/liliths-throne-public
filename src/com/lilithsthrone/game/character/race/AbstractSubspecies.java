@@ -70,6 +70,7 @@ public abstract class AbstractSubspecies {
 	private Map<PersonalityTrait, Float> personalityChanceOverrides;
 	
 	private String applySubspeciesChanges;
+	private String applySubspeciesAdjustments;
 	private String subspeciesWeighting;
 	
 	private String attributeItemId;
@@ -426,6 +427,11 @@ public abstract class AbstractSubspecies {
 				}
 				
 				this.applySubspeciesChanges = coreElement.getMandatoryFirstOf("applySubspeciesChanges").getTextContent();
+				coreElement.getOptionalFirstOf("applySubspeciesAdjustments").ifPresent(
+							(Element e) ->{
+								this.applySubspeciesAdjustments = e.getTextContent();
+							}
+						);
 				this.subspeciesWeighting = coreElement.getMandatoryFirstOf("subspeciesWeighting").getTextContent();
 				
 				this.pathName = XMLFile.getParentFile().getAbsolutePath() + "/"+ coreElement.getMandatoryFirstOf("iconName").getTextContent();
@@ -767,6 +773,16 @@ public abstract class AbstractSubspecies {
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * Applies any special racial changes to the character which is passed in. This is called <b>after</b> Race.applyRaceAdjustments()
+	 * This is meant for applying special species-wide perks, fetishes, or other non-physical changes.
+	 */
+	public void applySpeciesAdjustments(GameCharacter character) {
+		if(this.isFromExternalFile()) {
+			UtilText.parse(character, applySubspeciesAdjustments);
 		}
 	}
 

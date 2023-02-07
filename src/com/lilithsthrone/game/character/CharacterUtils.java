@@ -906,6 +906,9 @@ public class CharacterUtils {
 		raceTakesAfter.getRace().applyRaceChanges(body);
 		raceTakesAfter.applySpeciesChanges(body);
 		
+		raceTakesAfter.getRace().applyRaceAdjustments(linkedCharacter);
+		raceTakesAfter.applySpeciesAdjustments(linkedCharacter);
+		
 		body.setTakesAfterMother(takesAfterMother);
 		
 		return body;
@@ -1153,6 +1156,11 @@ public class CharacterUtils {
 		halfSubspecies.getRace().applyRaceChanges(body);
 		halfSubspecies.applySpeciesChanges(body);
 		
+		if (linkedCharacter != null) {
+			halfSubspecies.getRace().applyRaceAdjustments(linkedCharacter);
+			halfSubspecies.applySpeciesAdjustments(linkedCharacter);
+		}
+		
 		setBodyHair(body);
 		
 		return body;
@@ -1331,10 +1339,20 @@ public class CharacterUtils {
 			if(stage!=RaceStage.HUMAN) {
 				species.getRace().applyRaceChanges(body);
 				species.applySpeciesChanges(body);
+				
+				if (linkedCharacter != null) {
+					species.getRace().applyRaceAdjustments(linkedCharacter);
+					species.applySpeciesAdjustments(linkedCharacter);
+				}
 			}
 			if(isSlime) {
 				Race.SLIME.applyRaceChanges(body);
 				Subspecies.SLIME.applySpeciesChanges(body);
+				
+				if (linkedCharacter != null) {
+					Race.SLIME.applyRaceAdjustments(linkedCharacter);
+					Subspecies.SLIME.applySpeciesAdjustments(linkedCharacter);
+				}
 			}
 		}
 		
@@ -1491,6 +1509,9 @@ public class CharacterUtils {
 		if(species!=null && stage!=RaceStage.HUMAN) {
 			species.getRace().applyRaceChanges(body);
 			species.applySpeciesChanges(body);
+			
+			species.getRace().applyRaceAdjustments(linkedCharacter);
+			species.applySpeciesAdjustments(linkedCharacter);
 		}
 		body.calculateRace(linkedCharacter);
 		// To add or remove youko perks
@@ -2117,6 +2138,8 @@ public class CharacterUtils {
 
 		character.getRace().applyRaceChanges(character.getBody());
 		character.getSubspecies().applySpeciesChanges(character.getBody());
+		character.getRace().applyRaceAdjustments(character);
+		character.getSubspecies().applySpeciesAdjustments(character);
 		character.getBody().calculateRace(character);
 	}
 	
