@@ -1852,6 +1852,7 @@ public class Game implements XMLSaving {
 		
 		SlaverAlleyDialogue.dailyReset();
 		
+		UtilText.resetParsingEngine();
 		UtilText.initScriptEngine();
 
 		setStarted(true);

@@ -234,21 +234,17 @@ public class ParserTarget {
 	public static AbstractParserTarget WYNTER;
 	public static AbstractParserTarget OGLIX;
 	
+	private static boolean initialized = false;
+	
 	public static void initializeTargets() {
-		/*STYLE = new SpecificParserTarget(
-				Util.newArrayListOfValues("style", "game", "util"),
-				"Returns the same as 'pc', but should be used for style methods such as style.bold or style.italics or conditional methods such as game.isArcaneStorm.",
-				Main.game.getPlayer());
-
-		UNIT = new SpecificParserTarget(
-				Util.newArrayListOfValues("unit", "units", "game"),
-				"Returns the same as 'pc', but should be used for unit methods such as unit.size.",
-				Main.game.getPlayer());*/
-		
 		PC = new SpecificParserTarget(
 				Util.newArrayListOfValues("pc", "player"),
 				"The player character.",
 				Main.game.getPlayer());
+		
+		// Skip over the AbstractParserTargets if we're recreating a new game, to avoid NullPointerExceptions.
+		// TODO: Fix this...maybe? Would require a slightly wide-reaching restructure.
+		if (!initialized) {
 		
 		/**
 		 * The main parser tag for getting a hook on npcs when using UtilText's {@code parseFromXMLFile()} methods.
@@ -376,6 +372,7 @@ public class ParserTarget {
 						throw new NullPointerException();
 					}
 				};
+		};
 
 		ELEMENTAL = new AbstractParserTarget(Util.newArrayListOfValues(
 				"el",
@@ -690,6 +687,8 @@ public class ParserTarget {
 				}
 			}
 		}
+		
+		initialized = true;
 	}
 	
 	
